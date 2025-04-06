@@ -4,17 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Create root for React 18+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Render the main application
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
 
-// Optional: Log web vitals or send to analytics endpoint
-// To log to the console: reportWebVitals(console.log);
-// To send to analytics service: reportWebVitals((metric) => { ... });
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
