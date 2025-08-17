@@ -12,8 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Use checkout scm for Pipeline-from-SCM jobs
-                checkout scm
+                git branch: 'main', url: 'https://github.com/Seshasayee1306/MedTechPro.git'
             }
         }
 
@@ -21,7 +20,6 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        set -e
                         echo "Checking prerequisites..."
                         docker --version
                         docker-compose --version
@@ -37,7 +35,6 @@ pipeline {
                                   credentialsId: 'aws-creds']]) {
                     script {
                         sh '''
-                            set -e
                             echo "Logging into ECR..."
                             aws ecr get-login-password --region $AWS_REGION | \
                             docker login --username AWS --password-stdin $ECR_REGISTRY
@@ -51,12 +48,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
-                        set -e
-                        # Build and tag image with both BUILD_NUMBER and latest
-                        docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG \
-                                     -t $ECR_REGISTRY/$ECR_REPO:latest .
-                    '''
+                    sh "docker build -t ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} ."
+                    sh "docker tag ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} ${ECR_REGISTRY}/${ECR_REPO}:latest"
                 }
             }
         }
@@ -64,11 +57,8 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 script {
-                    sh '''
-                        set -e
-                        docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
-                        docker push $ECR_REGISTRY/$ECR_REPO:latest
-                    '''
+                    sh "docker push ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
+                    sh "docker push ${ECR_REGISTRY}/${ECR_REPO}:latest"
                 }
             }
         }
@@ -77,9 +67,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        set -e
-                        docker rmi $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG || true
-                        docker rmi $ECR_REGISTRY/$ECR_REPO:latest || true
+                        docker rmi ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} || true
+                        docker rmi ${ECR_REGISTRY}/${ECR_REPO}:latest || true
                         docker system prune -f || true
                     '''
                 }
@@ -88,14 +77,8 @@ pipeline {
     }
 
     post {
-        always { 
-            cleanWs() 
-        }
-        success { 
-            echo 'Pipeline succeeded!' 
-        }
-        failure { 
-            echo 'Pipeline failed!' 
-        }
+        always { cleanWs() }
+        success { echo 'Pipeline succeeded!' }
+        failure { echo 'Pipeline failed!' }
     }
 }
