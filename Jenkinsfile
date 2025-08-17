@@ -11,9 +11,11 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Seshasayee1306/MedTechPro.git'
-            }
+    steps {
+        git branch: 'main', url: 'https://github.com/Seshasayee1306/MedTechPro.git'
+    }
+}
+
         }
 
         stage('Verify Prerequisites') {
