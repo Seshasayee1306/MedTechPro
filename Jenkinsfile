@@ -1,84 +1,51 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_REGION = "eu-north-1"
-        ECR_REPO = "frontend-app"
-        AWS_ACCOUNT_ID = "390402538328"
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
-        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-    }
-
     stages {
+
         stage('Checkout') {
             steps {
+                echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/Seshasayee1306/MedTechPro.git'
             }
         }
 
-        stage('Verify Prerequisites') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    sh '''
-                        echo "Checking prerequisites..."
-                        docker --version
-                        docker-compose --version
-                        aws --version
-                    '''
-                }
+                echo 'Installing Node.js dependencies...'
+                sh 'npm install'
             }
         }
 
-        stage('Login to ECR') {
+        stage('Build React Frontend') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                                  credentialsId: 'aws-creds']]) {
-                    script {
-                        sh '''
-                            echo "Logging into ECR..."
-                            aws ecr get-login-password --region $AWS_REGION | \
-                            docker login --username AWS --password-stdin $ECR_REGISTRY
-                            echo "ECR login successful"
-                        '''
-                    }
-                }
+                echo 'Building React frontend...'
+                sh 'npm run build'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Run Backend / Tests') {
             steps {
-                script {
-                    sh "docker build -t ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} ."
-                    sh "docker tag ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} ${ECR_REGISTRY}/${ECR_REPO}:latest"
-                }
+                echo 'Running backend server or tests...'
+                // If you have backend tests, replace with: sh 'npm test || true'
+                sh 'node server.js & sleep 5' // simple example: start server briefly
             }
         }
 
-        stage('Push to ECR') {
+        stage('Archive Artifacts') {
             steps {
-                script {
-                    sh "docker push ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
-                    sh "docker push ${ECR_REGISTRY}/${ECR_REPO}:latest"
-                }
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    sh '''
-                        docker rmi ${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG} || true
-                        docker rmi ${ECR_REGISTRY}/${ECR_REPO}:latest || true
-                        docker system prune -f || true
-                    '''
-                }
+                echo 'Archiving frontend build...'
+                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
             }
         }
     }
 
     post {
-        always { cleanWs() }
-        success { echo 'Pipeline succeeded!' }
-        failure { echo 'Pipeline failed!' }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
+        }
     }
 }
