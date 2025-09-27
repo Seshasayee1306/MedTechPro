@@ -5,7 +5,6 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import S3Contents from './components/S3Contents';
-import Predictions from './components/Predictions';
 import AthenaQuery from './components/AthenaQuery';
 import SendEmail from './components/SendEmail';
 import Visualization from './components/Visualization'; // 📊 Real-time Graph Page
@@ -25,7 +24,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/s3" element={<S3Contents />} />
-            <Route path="/predictions" element={<Predictions />} />
             <Route path="/athena" element={<AthenaQuery />} />
             <Route path="/send-email" element={<SendEmail />} />
             <Route path="/visualization" element={<Visualization />} /> {/* 👈 New Route */}
