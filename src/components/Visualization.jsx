@@ -35,7 +35,7 @@ export default function Visualization() {
 
   useEffect(() => {
     loadAllData();
-  }, []);
+  }, [loadAllData]);
 
   const loadAllData = async () => {
     setLoading(true);

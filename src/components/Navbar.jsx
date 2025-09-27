@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ const Navbar = () => {
   const navItems = [
     { label: 'Dashboard', path: '/' },
     { label: 'Inventory', path: '/s3' },
-    { label: 'Maintenance', path: '/predictions' },
     { label: 'Search Records', path: '/athena' },
     { label: 'Alerts', path: '/send-email' },
     { label: 'Real-Time Graphs', path: '/visualization' } // ✅ New Nav Item
