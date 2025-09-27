@@ -35,9 +35,31 @@ function S3Contents() {
     }
   };
 
-  const handleDownload = (key) => {
-    const encodedKey = encodeURIComponent(key);
-    window.open(`http://localhost:3001/api/download-s3?key=${encodedKey}`, '_blank');
+  const handleDownload = async (key) => {
+    try {
+      // 1. Make the API call to your backend's correct endpoint
+      const encodedKey = encodeURIComponent(key);
+      const response = await fetch(`http://localhost:3001/api/download-url?key=${encodedKey}`);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get download URL from server');
+      }
+
+      // 2. Parse the JSON response
+      const data = await response.json();
+
+      if (data.success && data.url) {
+        // 3. Use the URL from the JSON response to redirect and download
+        window.location.href = data.url;
+      } else {
+        throw new Error('Download URL not found in response');
+      }
+
+    } catch (error) {
+      console.error('Download Error:', error);
+      setError(`Download failed: ${error.message}`);
+    }
   };
 
   // Function to refresh S3 contents
