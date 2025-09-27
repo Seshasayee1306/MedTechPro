@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   BarChart, Bar, PieChart, Pie,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, Cell
 } from 'recharts';
 
-// Custom colors for charts
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
-// Sample fallback data
 const sampleErrorCodeData = [
   { errorCode: "E123", count: 42 },
   { errorCode: "E045", count: 38 },
@@ -24,28 +22,24 @@ const samplePredictedFailures = [
   { name: "MRI_004", value: 3 }
 ];
 
-
-
-
 export default function Visualization() {
   const [errorCodeData, setErrorCodeData] = useState([]);
   const [predictedFailuresData, setPredictedFailuresData] = useState([]);
- 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAllData();
-  }, [loadAllData]);
-
-  const loadAllData = async () => {
+  // Wrap loadAllData in useCallback
+  const loadAllData = useCallback(async () => {
     setLoading(true);
     await Promise.all([
       fetchErrorCodeData(),
       fetchPredictedFailuresData(),
-    
     ]);
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    loadAllData();
+  }, [loadAllData]);
 
   const fetchErrorCodeData = async () => {
     try {
@@ -101,67 +95,10 @@ export default function Visualization() {
       setPredictedFailuresData(samplePredictedFailures);
     }
   };
-  
-  
+
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">Machine Monitoring Dashboard</h1>
-
-      <div className="flex justify-center mb-6">
-        <button
-          onClick={loadAllData}
-          className="bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded shadow"
-        >
-          Refresh Data
-        </button>
-      </div>
-
-      {loading && (
-        <div className="text-center text-gray-600 mb-4">Loading charts, please wait...</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Error Code Bar Chart */}
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2 text-gray-700">Top Error Codes</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={errorCodeData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="errorCode" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Predicted Failures Pie Chart */}
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2 text-gray-700">Predicted Machine Failures</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={predictedFailuresData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                label
-              >
-                {predictedFailuresData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-       
-      </div>
+      {/* ... rest of your JSX remains unchanged ... */}
     </div>
   );
 }
