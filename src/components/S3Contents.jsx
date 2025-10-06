@@ -7,6 +7,8 @@ function S3Contents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const BACKEND_URL = "http://backend:5000";
+
   useEffect(() => {
     fetchS3Contents();
   }, []);
@@ -14,7 +16,7 @@ function S3Contents() {
   const fetchS3Contents = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/api/s3-contents');
+      const response = await fetch(`${BACKEND_URL}/api/s3-contents`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -37,20 +39,17 @@ function S3Contents() {
 
   const handleDownload = async (key) => {
     try {
-      // 1. Make the API call to your backend's correct endpoint
       const encodedKey = encodeURIComponent(key);
-      const response = await fetch(`http://localhost:3001/api/download-url?key=${encodedKey}`);
+      const response = await fetch(`${BACKEND_URL}/api/download-url?key=${encodedKey}`);
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to get download URL from server');
       }
 
-      // 2. Parse the JSON response
       const data = await response.json();
 
       if (data.success && data.url) {
-        // 3. Use the URL from the JSON response to redirect and download
         window.location.href = data.url;
       } else {
         throw new Error('Download URL not found in response');
@@ -62,9 +61,8 @@ function S3Contents() {
     }
   };
 
-  // Function to refresh S3 contents
   const handleRefresh = () => {
-    fetchS3Contents(); // Re-fetch S3 contents
+    fetchS3Contents();
   };
 
   return (
@@ -122,7 +120,6 @@ function S3Contents() {
         </Typography>
       </Box>
 
-      {/* Refresh Button */}
       <Box sx={{ mt: 4 }}>
         <Button
           variant="contained"

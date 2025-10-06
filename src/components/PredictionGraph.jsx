@@ -7,9 +7,11 @@ const PredictionGraph = () => {
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BACKEND_URL = "http://backend:5000";
+
   const fetchPredictions = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/latest-predictions');
+      const res = await fetch(`${BACKEND_URL}/api/latest-predictions`);
       const json = await res.json();
       if (json.data) {
         setPredictions(json.data);

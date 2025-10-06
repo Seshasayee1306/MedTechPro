@@ -8,6 +8,8 @@ function AthenaQuery() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const BACKEND_URL = "http://backend:5000";
+
   const runSearch = async () => {
     if (!searchTerm.trim()) return;
 
@@ -17,7 +19,7 @@ function AthenaQuery() {
       setResults([]);
       setColumns([]);
 
-      const response = await fetch('http://localhost:3001/api/search-athena', {
+      const response = await fetch(`${BACKEND_URL}/api/search-athena`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keyword: searchTerm })

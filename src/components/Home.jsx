@@ -18,9 +18,11 @@ const Home = () => {
   const [streaming, setStreaming] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
 
+  const BACKEND_URL = "http://backend:5000";
+
   const toggleStream = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/toggle-stream', {
+      const res = await fetch(`${BACKEND_URL}/api/toggle-stream`, {
         method: 'POST'
       });
       const data = await res.json();
