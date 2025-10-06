@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://backend:5000';
 
 const machines = [
   { id: 1, name: 'MRI Machine 1' },
@@ -21,21 +21,16 @@ function SendEmail() {
   const [loadingIndex, setLoadingIndex] = useState(null);
   const [statuses, setStatuses] = useState(Array(4).fill(''));
 
-  // ⏱️ Timer countdown effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCounts(prevCounts =>
-        prevCounts.map((count, index) => {
-          if (count > 0) return count - 1;
-          else return 0;
-        })
+        prevCounts.map((count) => (count > 0 ? count - 1 : 0))
       );
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // 📩 Trigger email when countdown hits 0
   useEffect(() => {
     counts.forEach((count, index) => {
       if (count === 0 && (hours[index] > 0 || minutes[index] > 0)) {

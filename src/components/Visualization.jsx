@@ -29,7 +29,6 @@ export default function Visualization() {
   const [predictedFailuresData, setPredictedFailuresData] = useState(samplePredictedFailures);
   const [loading, setLoading] = useState(false);
 
-  // Wrap loadAllData in useCallback to avoid useEffect warnings
   const loadAllData = useCallback(async () => {
     setLoading(true);
     await Promise.all([
@@ -79,7 +78,7 @@ export default function Visualization() {
 
   const fetchPredictedFailuresData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/latest-predictions");
+      const response = await fetch("http://backend:5000/api/latest-predictions"); // ✅ Updated backend URL
       const result = await response.json();
       if (result.success && Array.isArray(result.data)) {
         const processed = result.data.map(item => ({
