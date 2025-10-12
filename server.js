@@ -126,8 +126,8 @@ app.post('/api/search-athena', async (req, res) => {
 
   if (!keyword) return res.status(400).json({ error: 'Keyword is required' });
 
-  const db = 'prmaintain_data'; // explicitly set database name
-  const tbl = 'kinesis_data';   // explicitly set table name
+  const db = 'crat1'; // explicitly set database name
+  const tbl = 'mri_logs';   // explicitly set table name
   const table = `${db}.${tbl}`;
 
   // Escape single quotes in keyword
@@ -135,25 +135,25 @@ app.post('/api/search-athena', async (req, res) => {
 
 
   const query = `
-    SELECT 
-      item.timestamp,
-      item.machine_id,
-      item.error_code,
-      item.status,
-      item.message,
-      item.start_time,
-      item.end_time,
-      item.machine_runtime,
-      item.resolved
-    FROM ${table}
-    CROSS JOIN UNNEST(array) AS t(item)
-    WHERE 
-      LOWER(item.status) LIKE '%${kw}%' OR
-      LOWER(item.machine_id) LIKE '%${kw}%' OR
-      LOWER(item.error_code) LIKE '%${kw}%' OR
-      CAST(item.timestamp AS VARCHAR) LIKE '%${kw}%'
-    LIMIT 100;
-  `;
+  SELECT 
+    timestamp,
+    machine_id,
+    error_code,
+    status,
+    message,
+    start_time,
+    end_time,
+    machine_runtime,
+    resolved
+  FROM ${table}
+  WHERE 
+    LOWER(status) LIKE '%${kw}%' OR
+    LOWER(machine_id) LIKE '%${kw}%' OR
+    LOWER(error_code) LIKE '%${kw}%' OR
+    CAST(timestamp AS VARCHAR) LIKE '%${kw}%'
+  LIMIT 100;
+`;
+
 
   const params = {
     QueryString: query,
@@ -195,7 +195,7 @@ app.post('/api/search-athena', async (req, res) => {
 
     console.log('Processed Results:', processedResults); 
 
-    res.json({ data: results.ResultSet.Rows });  // Ensure 'data' is wrapped around the results
+    res.json({ data: processedResults });  // Ensure 'data' is wrapped around the results
 
 
   } catch (error) {

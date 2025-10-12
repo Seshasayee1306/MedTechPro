@@ -8,7 +8,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import TimerIcon from '@mui/icons-material/Timer';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
-const API_URL = 'http://backend:5000';
+const API_URL = 'http://localhost:3001';
 
 const machines = [
   { id: 1, name: 'MRI Machine 1', color: '#6366f1' },
