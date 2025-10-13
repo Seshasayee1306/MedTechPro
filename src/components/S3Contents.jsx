@@ -7,7 +7,7 @@ function S3Contents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ;
 
 
   useEffect(() => {

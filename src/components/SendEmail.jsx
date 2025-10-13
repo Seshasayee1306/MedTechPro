@@ -8,7 +8,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import TimerIcon from '@mui/icons-material/Timer';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ;
 
 
 const machines = [

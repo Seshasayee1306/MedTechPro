@@ -18,7 +18,7 @@ const Home = () => {
   const [streaming, setStreaming] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ;
 
 
   const toggleStream = async () => {
