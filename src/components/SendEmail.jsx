@@ -72,7 +72,7 @@ function SendEmail() {
   const sendEmail = async (index) => {
     setLoadingIndex(index);
     try {
-      const response = await fetch(`${API_URL}/api/send-maintenance-email`, {
+      const response = await fetch(`${BACKEND_URL}/api/send-maintenance-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
