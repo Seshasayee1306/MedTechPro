@@ -7,7 +7,7 @@ function S3Contents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const BACKEND_URL = "http://localhost:3001";
+  const BACKEND_URL = "http://backend-v2:3001";
 
   useEffect(() => {
     fetchS3Contents();

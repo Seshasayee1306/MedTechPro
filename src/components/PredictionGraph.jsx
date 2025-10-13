@@ -7,7 +7,7 @@ const PredictionGraph = () => {
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const BACKEND_URL = "http://localhost:3001";
+  const BACKEND_URL = "http://backend-v2:3001";
 
   const fetchPredictions = async () => {
     try {
