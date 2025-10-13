@@ -8,7 +8,8 @@ function AthenaQuery() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const BACKEND_URL = "http://backend-v2:3001";
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
 
   const runSearch = async () => {
     if (!searchTerm.trim()) return;
