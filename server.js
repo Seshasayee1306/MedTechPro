@@ -283,6 +283,10 @@ app.post('/api/send-maintenance-email', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('✅ Backend is running!');
+});
+
 // Start server
 const PORT = process.env.PORT || 3001;
 
