@@ -16,7 +16,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo "Installing Node.js dependencies..."
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo "Building React app..."
                 dir('src') {   // adjust if your React frontend root is different
-                    sh 'npm run build'
+                    bat 'npm run build'
                 }
             }
         }
@@ -32,8 +32,8 @@ pipeline {
         stage('Run Backend / Tests') {
             steps {
                 echo "Running backend..."
-                sh 'node server.js &'
-                sh 'npm test || true'
+                bat 'node server.js &'
+                bat 'npm test || true'
             }
         }
 
